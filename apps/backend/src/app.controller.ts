@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import type { AppService } from './app.service';
+// biome-ignore lint/style/useImportType: NestJS needs the runtime class for constructor metadata.
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
