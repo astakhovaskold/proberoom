@@ -1,0 +1,149 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "ignoreUnknown": false,
+        "includes": [
+            "**",
+            "!**/dist",
+            "!**/build",
+            "!**/node_modules",
+            "!**/coverage",
+            "!**/playwright-report",
+            "!**/vite.config.ts"
+        ]
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 100,
+        "lineEnding": "lf",
+        "formatWithErrors": true
+    },
+    "assist": { "actions": { "source": { "organizeImports": "on" } } },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+
+            "correctness": {
+                "noUnusedVariables": {
+                    "level": "error"
+                },
+                "noUnusedImports": "error",
+                "useExhaustiveDependencies": "error"
+            },
+
+            "suspicious": {
+                "noExplicitAny": "warn",
+                "noDoubleEquals": "error",
+                "noShadowRestrictedNames": "error",
+                "noConsole": { "level": "warn", "options": { "allow": ["log"] } },
+                "noVar": "error"
+            },
+
+            "style": {
+                "useConst": "error",
+                "useTemplate": "error",
+                "useShorthandAssign": "error",
+                "noNegationElse": "error",
+                "useDefaultParameterLast": "error",
+                "noParameterAssign": "error",
+                "useImportType": "error",
+                "useNamingConvention": {
+                    "level": "error",
+                    "options": {
+                        "strictCase": false,
+                        "conventions": [
+                            {
+                                "selector": { "kind": "variable" },
+                                "formats": ["camelCase", "CONSTANT_CASE", "PascalCase"]
+                            },
+                            {
+                                "selector": { "kind": "function" },
+                                "formats": ["camelCase", "PascalCase"]
+                            },
+                            {
+                                "selector": { "kind": "typeLike" },
+                                "formats": ["PascalCase"]
+                            }
+                        ]
+                    }
+                },
+                "useConsistentArrayType": { "level": "error", "options": { "syntax": "shorthand" } }
+            },
+
+            "complexity": {
+                "noExcessiveCognitiveComplexity": {
+                    "level": "warn",
+                    "options": { "maxAllowedComplexity": 15 }
+                },
+                "useArrowFunction": "error",
+                "noUselessFragments": "error"
+            },
+
+            "a11y": {
+                "useAltText": "error",
+                "useButtonType": "error",
+                "noAutofocus": "warn"
+            }
+        }
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "trailingCommas": "all",
+            "semicolons": "always",
+            "arrowParentheses": "always",
+            "bracketSpacing": true,
+            "bracketSameLine": false
+        },
+        "globals": ["React", "JSX"]
+    },
+    "overrides": [
+        {
+            "includes": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+            "linter": {
+                "rules": {
+                    "suspicious": {
+                        "noExplicitAny": "off",
+                        "noConsole": { "level": "off", "options": { "allow": ["log"] } }
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["**/apps/backend/**"],
+            "linter": {
+                "rules": {
+                    "suspicious": {
+                        "noConsole": { "level": "off", "options": { "allow": ["log"] } }
+                    },
+                    "style": {
+                        "useNamingConvention": {
+                            "level": "error",
+                            "options": {
+                                "strictCase": false,
+                                "conventions": [
+                                    {
+                                        "selector": { "kind": "classProperty" },
+                                        "formats": ["camelCase"]
+                                    },
+                                    {
+                                        "selector": { "kind": "typeLike" },
+                                        "formats": ["PascalCase"]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

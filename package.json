@@ -1,0 +1,24 @@
+{
+    "name": "proberoom",
+    "version": "0.1.0",
+    "description": "Self-hosted platform for technical interviews with real-time collaborative code editor and white-label branding.",
+    "scripts": {
+        "dev": "pnpm -r --parallel run dev",
+        "build": "pnpm -r run build",
+        "lint": "biome lint .",
+        "format": "biome format --write .",
+        "check": "biome check --write .",
+        "typecheck": "pnpm -r run typecheck"
+    },
+    "engines": {
+        "node": ">=20",
+        "pnpm": ">=9"
+    },
+    "keywords": [],
+    "author": "Askold Astakhov <astakhovaskold@gmail.com>",
+    "license": "AGPL-3.0",
+    "packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247",
+    "devDependencies": {
+        "@biomejs/biome": "^2.4.15"
+    }
+}
