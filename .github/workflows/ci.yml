@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome check
+        run: pnpm lint
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check all packages
+        run: pnpm typecheck
+
+  pr-size:
+    name: PR Size Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR size
+        env:
+          ADDED: ${{ github.event.pull_request.additions }}
+          DELETED: ${{ github.event.pull_request.deletions }}
+          FILES: ${{ github.event.pull_request.changed_files }}
+        run: |
+          has_error=false
+
+          if [ "$ADDED" -gt 500 ]; then
+            echo "::error::PR is too large: +$ADDED lines added (limit: 500). Please split it into smaller PRs."
+            has_error=true
+          elif [ "$ADDED" -gt 350 ]; then
+            echo "::warning::PR is getting large: +$ADDED lines added (recommended: ≤ 350)."
+          fi
+
+          total=$((ADDED + DELETED))
+          if [ "$total" -gt 450 ]; then
+            echo "::warning::High churn: $total lines changed (+$ADDED / -$DELETED, recommended: ≤ 450)."
+          fi
+
+          if [ "$FILES" -ge 30 ]; then
+            echo "::error::Too many files changed: $FILES (limit: 30). Please split into smaller PRs."
+            has_error=true
+          elif [ "$FILES" -ge 20 ]; then
+            echo "::warning::Many files changed: $FILES (recommended: < 20)."
+          fi
+
+          if [ "$has_error" = true ]; then
+            exit 1
+          fi
+
+  test-backend:
+    name: Test / backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm --filter backend test
